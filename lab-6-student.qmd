@@ -39,9 +39,9 @@ ca_childcare <- counties %>%
   full_join(childcare_costs)
 
 ca_childcare %>%
-  select(county_fips_code, county_name, state_name, state_abbreviation, mhi_2018, mc_infant, mc_toddler, mc_preschool, mcsa, study_year, ) 
+  select(county_fips_code, county_name, state_name, state_abbreviation, mhi_2018, mc_infant, mc_toddler, mc_preschool, mcsa, study_year) 
   
-  
+
 ```
 
 **3. Using a function from the `forcats` package, complete the code below to create a new variable where each county is categorized into one of the [10 Census regions](https://census.ca.gov/regions/) in California. Use the Region description (from the plot), not the Region number. An example region has been started for you.**  
@@ -57,6 +57,30 @@ ca_childcare <- ca_childcare |>
     'Superior California' = c("Butte", "Colusa", "El Dorado". ...),
      ...
     ))
+```
+
+```{r}
+#| label: recoding-county-to-census-regions
+
+library(dplyr)
+library(stringr)
+library(forcats)
+
+ca_childcare <- ca_childcare |> 
+  mutate(county_name = str_remove(county_name, " County")) |> 
+  mutate(region = fct_collapse(county_name,
+    'Superior California' = c("Butte", "Colusa", "Glenn", "Lassen", "Modoc", "Nevada", "Plumas", "Shasta", "Sierra", "Siskiyou", "Tehama", "Trinity"),
+    'North Coast' = c("Del Norte", "Humboldt", "Lake", "Mendocino", "Sonoma"),
+    'San Francisco Bay Area' = c("Alameda", "Contra Costa", "Marin", "Napa", "San Francisco", "San Mateo", "Santa Clara", "Solano"),
+    'Northern San Joaquin Valley' = c("Merced", "San Joaquin", "Stanislaus"),
+    'Central Coast' = c("Monterey", "San Benito", "San Luis Obispo", "Santa Barbara", "Santa Cruz"),
+    'San Diego-Imperial' = c("Imperial", "San Diego"),
+    'Inland Empire' = c("Riverside", "San Bernardino"),
+    'Southern San Joaquin Valley' = c("Fresno", "Kern", "Kings", "Madera", "Tulare"),
+    'Greater Los Angeles' = c("Los Angeles", "Orange", "Ventura"),
+    'Sacramento Area' = c("El Dorado", "Placer", "Sacramento", "Sutter", "Yolo", "Yuba")
+  ))
+
 ```
 
 
