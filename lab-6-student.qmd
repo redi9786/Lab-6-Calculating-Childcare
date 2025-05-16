@@ -11,6 +11,9 @@ The data come to us from [TidyTuesday](https://github.com/rfordatascience/tidytu
 #| label: setup
 library(tidyverse)
 library(janitor)
+library(dplyr)
+library(stringr)
+library(forcats)
 ```
 
 ```{r}
@@ -36,10 +39,9 @@ Let's start by focusing only on California.
 ```{r}
 #| label: ca-childcare-costs
 ca_childcare <- counties %>%
-  full_join(childcare_costs)
-
-ca_childcare %>%
-  select(county_fips_code, county_name, state_name, state_abbreviation, mhi_2018, mc_infant, mc_toddler, mc_preschool, mcsa, study_year) 
+  full_join(childcare_costs) %>%
+  select(county_fips_code, county_name, state_name, state_abbreviation, mhi_2018, mc_infant, mc_toddler, mc_preschool, mcsa, study_year) %>%
+  filter(state_name == "California")
   
 
 ```
@@ -48,23 +50,9 @@ ca_childcare %>%
 
 *Hint: This is probably a good place to use ChatGPT to reduce on tedious work. But you do need to know how to prompt ChatGPT to make it useful!*
 
-```{r}
-#| label: recoding-county-to-census-regions
-
-ca_childcare <- ca_childcare |> 
-  mutate(county_name = str_remove(county_name, " County")) |> 
-  mutate(region = fct_______(county_name,
-    'Superior California' = c("Butte", "Colusa", "El Dorado". ...),
-     ...
-    ))
-```
 
 ```{r}
 #| label: recoding-county-to-census-regions
-
-library(dplyr)
-library(stringr)
-library(forcats)
 
 ca_childcare <- ca_childcare |> 
   mutate(county_name = str_remove(county_name, " County")) |> 
