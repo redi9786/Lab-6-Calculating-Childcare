@@ -78,6 +78,12 @@ ca_childcare <- ca_childcare |>
 #| label: median-income-by-region-over-time
 # Hint: You will want to calculate the median of median income before you make columns for 2008/2018 by transforming the data
 
+ca_childcare %>%
+  group_by(region, study_year) %>%
+  summarise(median_mhi = median(mhi_2018, na.rm = TRUE)) %>%
+  filter(study_year == "2018")
+
+
 
 ```
 
@@ -88,6 +94,11 @@ ca_childcare <- ca_childcare |>
 
 ```{r}
 #| label: lowest-median-weekly-price-2018
+ca_childcare %>%
+  group_by(region, study_year) %>%
+  summarise(median_infant = median(mc_infant, na.rm = TRUE)) %>%
+  filter(study_year == "2018") %>%
+  filter(median_infant < 190)
 
 
 ```
