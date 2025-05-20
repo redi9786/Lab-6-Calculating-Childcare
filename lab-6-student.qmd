@@ -105,10 +105,48 @@ ca_childcare %>%
 
 **6. Recreate the plot (look at online instructions) that shows, for all ten regions, the change over time of the full-time median price for center-based childcare for infants, toddlers, and preschoolers. Recreate the plot. You do not have to replicate the exact colors or theme, but your plot should have the same content, including the order of the facets and legend, reader-friendly labels, axes breaks, and a  smooth function.**
 
-
 ```{r}
-#| label: recreate-plot
+library(tidyverse)
+
+ca_childcare_long <- ca_childcare |>
+  pivot_longer(
+    cols = c(mc_infant, mc_toddler, mc_preschool),
+    names_to = "age_group",
+    values_to = "weekly_price"
+  )
 
 ```
 
+
+
+
+
+```{r}
+#| label: recreate-plot
+ca_childcare_long |>
+  ggplot(aes(x = study_year, y = weekly_price, color = region)) +
+  geom_point(alpha = 0.6) +
+  geom_smooth(se = TRUE, method = "loess") +
+  facet_wrap(~ age_group) +
+  scale_color_manual(values = c(
+    "San Francisco Bay Area" = "darkolivegreen3",
+    "Orange County" = "orange",
+    "Los Angeles County" = "orchid",
+    "Northern San Joaquin Valley" = "brown",
+    "Central Coast" = "goldenrod",
+    "Inland Empire" = "gray50",
+    "Superior California" = "deeppink3",
+    "Southern San Joaquin Valley" = "maroon",
+    "San Diego-Imperial" = "red",
+    "North Coast" = "tan"
+  )) +
+  labs(
+    title = "Weekly Median Price for Center-Based Childcare ($)",
+    x = "Study Year",
+    y = "Price ($)"
+  ) +
+  theme_minimal()
+
+```
+**Referenced Chat GPT for the graph**
 
